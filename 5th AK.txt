@@ -1,0 +1,48 @@
+
+python
+# 1. Import libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
+
+# 2. Load dataset
+data = pd.read_csv("Social_Network_Ads.csv")
+
+# 3. Select features (Age and Salary) and target (Purchased)
+X = data[['Age', 'EstimatedSalary']]
+y = data['Purchased']
+
+# 4. Split into train and test sets (70% train, 30% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+# 5. Scale features to bring them to the same range
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 6. Train logistic regression model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# 7. Predict on test data
+y_pred = model.predict(X_test)
+
+# 8. Confusion matrix and performance metrics
+cm = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:\n", cm)
+
+# Extract values from confusion matrix
+TN, FP, FN, TP = cm.ravel()
+
+# 9. Print metrics
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("Error Rate:", 1 - accuracy_score(y_test, y_pred))
+print("Precision:", precision_score(y_test, y_pred))
+print("Recall:", recall_score(y_test, y_pred))
+print("F1 Score:", f1_score(y_test, y_pred))
+
+
+---
+
